@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Water Falls INC. - Treinamento</title>
+</head>
+
+<body>
+
+<h1>Sistema de Treinamento</h1>
+
+<h2>Perguntas</h2>
+
+<a href="criar_pergunta.php">Criar pergunta</a>
+<br>
+<a href="listar_perguntas.php">Listar perguntas</a>
+
+<h2>Usuários</h2>
+
+<a href="usuarios.php">Gerenciar usuários</a>
+
+</body>
+</html>
+
+// Criando Perguntas //
+
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $desafio = $_POST["desafio"];
+    $pergunta = $_POST["pergunta"];
+    $tipo = $_POST["tipo"];
+
+    if ($tipo == "multipla") {
+
+        $opcao1 = $_POST["opcao1"];
+        $opcao2 = $_POST["opcao2"];
+        $opcao3 = $_POST["opcao3"];
+        $opcao4 = $_POST["opcao4"];
+        $correta = $_POST["correta"];
+
+        $linha = $desafio . "|" . $pergunta . "|" . $tipo . "|" .
+                 $opcao1 . "|" . $opcao2 . "|" . $opcao3 . "|" .
+                 $opcao4 . "|" . $correta . PHP_EOL;
+
+    } else {
+
+        $resposta = $_POST["resposta"];
+
+        $linha = $desafio . "|" . $pergunta . "|" . $tipo . "|" .
+                 $resposta . PHP_EOL;
+    }
+
+    file_put_contents("perguntas.txt", $linha, FILE_APPEND);
+
+    echo "Pergunta cadastrada!";
+}
+?>
+
+<h1>Criar Pergunta</h1>
+
+<form method="POST">
+
+    Desafio:
+    <br>
+    <input type="text" name="desafio">
+    <br><br>
+
+    Pergunta:
+    <br>
+    <textarea name="pergunta"></textarea>
+    <br><br>
+
+    Tipo:
+    <br>
+
+    <select name="tipo">
+        <option value="multipla">Múltipla escolha</option>
+        <option value="texto">Texto</option>
+    </select>
+
+    <br><br>
+
+    <h3>Opções</h3>
+
+    Opção 1:
+    <input type="text" name="opcao1">
+    <br>
+
+    Opção 2:
+    <input type="text" name="opcao2">
+    <br>
+
+    Opção 3:
+    <input type="text" name="opcao3">
+    <br>
+
+    Opção 4:
+    <input type="text" name="opcao4">
+
+    <br><br>
+
+    Resposta correta:
+    <input type="text" name="correta">
+
+    <br><br>
+
+    Resposta de texto:
+    <br>
+    <textarea name="resposta"></textarea>
+
+    <br><br>
+
+    <input type="submit" value="Cadastrar">
+
+</form>
+
+<br>
+
+<a href="index.php">Voltar</a>
