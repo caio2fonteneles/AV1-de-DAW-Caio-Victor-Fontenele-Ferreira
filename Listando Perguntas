@@ -1,0 +1,74 @@
+<?php
+
+$arquivo = "perguntas.txt";
+
+if (file_exists($arquivo)) {
+
+    $linhas = file($arquivo, FILE_IGNORE_NEW_LINES);
+
+} else {
+
+    $linhas = [];
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Listar Perguntas</title>
+</head>
+
+<body>
+
+<h1>Lista de Perguntas</h1>
+
+<?php
+
+if (count($linhas) == 0) {
+
+    echo "<p>Nenhuma pergunta cadastrada.</p>";
+
+} else {
+
+    foreach ($linhas as $linha) {
+
+        $dados = explode("|", $linha);
+
+        $id = $dados[0];
+        $desafio = $dados[1];
+        $pergunta = $dados[2];
+        $tipo = $dados[3];
+
+        echo "<hr>";
+
+        echo "<strong>ID:</strong> " . $id . "<br>";
+        echo "<strong>Desafio:</strong> " . $desafio . "<br>";
+        echo "<strong>Pergunta:</strong> " . $pergunta . "<br>";
+        echo "<strong>Tipo:</strong> " . $tipo . "<br>";
+
+        echo "<br>";
+
+        echo "<a href='visualizar_pergunta.php?id=" . $id . "'>Visualizar</a>";
+        echo " | ";
+
+        echo "<a href='editar_pergunta.php?id=" . $id . "'>Editar</a>";
+        echo " | ";
+
+        echo "<a href='excluir_pergunta.php?id=" . $id . "'>Excluir</a>";
+    }
+}
+
+?>
+
+<br><br>
+
+<a href="criar_pergunta.php">Criar nova pergunta</a>
+
+<br><br>
+
+<a href="index.php">Voltar</a>
+
+</body>
+</html>
