@@ -1,0 +1,106 @@
+<?php
+
+$id = $_GET["id"];
+
+$arquivo = "usuarios.txt";
+
+$linhas = file($arquivo, FILE_IGNORE_NEW_LINES);
+
+$usuarioEncontrado = null;
+$indice = -1;
+
+foreach ($linhas as $i => $linha) {
+
+    $dados = explode("|", $linha);
+
+    if ($dados[0] == $id) {
+
+        $usuarioEncontrado = $dados;
+        $indice = $i;
+
+        break;
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+
+    $linhaNova = $id . "|" .
+                 $nome . "|" .
+                 $email;
+
+    $linhas[$indice] = $linhaNova;
+
+    file_put_contents(
+        $arquivo,
+        implode(PHP_EOL, $linhas) . PHP_EOL
+    );
+
+    echo "<p>Usuário alterado com sucesso!</p>";
+
+    $usuarioEncontrado = explode("|", $linhaNova);
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Usuário</title>
+</head>
+
+<body>
+
+<h1>Editar Usuário</h1>
+
+<?php
+
+if ($usuarioEncontrado == null) {
+
+    echo "<p>Usuário não encontrado.</p>";
+
+} else {
+
+?>
+
+<form method="POST">
+
+    Nome:
+    <br>
+
+    <input type="text"
+           name="nome"
+           value="<?php echo $usuarioEncontrado[1]; ?>"
+           required>
+
+    <br><br>
+
+    E-mail:
+    <br>
+
+    <input type="email"
+           name="email"
+           value="<?php echo $usuarioEncontrado[2]; ?>"
+           required>
+
+    <br><br>
+
+    <input type="submit" value="Salvar alterações">
+
+</form>
+
+<?php
+
+}
+
+?>
+
+<br>
+
+<a href="usuarios.php">Voltar</a>
+
+</body>
+</html>
