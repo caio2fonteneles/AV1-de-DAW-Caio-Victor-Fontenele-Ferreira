@@ -1,0 +1,194 @@
+<?php
+
+$id = $_GET["id"];
+
+$arquivo = "perguntas.txt";
+
+$linhas = file($arquivo, FILE_IGNORE_NEW_LINES);
+
+$perguntaEncontrada = null;
+$indice = -1;
+
+foreach ($linhas as $i => $linha) {
+
+    $dados = explode("|", $linha);
+
+    if ($dados[0] == $id) {
+
+        $perguntaEncontrada = $dados;
+        $indice = $i;
+
+        break;
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $desafio = $_POST["desafio"];
+    $pergunta = $_POST["pergunta"];
+
+    $tipo = $perguntaEncontrada[3];
+
+    if ($tipo == "multipla") {
+
+        $opcao1 = $_POST["opcao1"];
+        $opcao2 = $_POST["opcao2"];
+        $opcao3 = $_POST["opcao3"];
+        $opcao4 = $_POST["opcao4"];
+        $correta = $_POST["correta"];
+
+        $linhaNova = $id . "|" .
+                     $desafio . "|" .
+                     $pergunta . "|" .
+                     $tipo . "|" .
+                     $opcao1 . "|" .
+                     $opcao2 . "|" .
+                     $opcao3 . "|" .
+                     $opcao4 . "|" .
+                     $correta;
+
+    } else {
+
+        $resposta = $_POST["resposta"];
+
+        $linhaNova = $id . "|" .
+                     $desafio . "|" .
+                     $pergunta . "|" .
+                     $tipo . "|" .
+                     $resposta;
+    }
+
+    $linhas[$indice] = $linhaNova;
+
+    file_put_contents($arquivo, implode(PHP_EOL, $linhas) . PHP_EOL);
+
+    echo "<p>Pergunta alterada com sucesso!</p>";
+
+    // Atualiza os dados exibidos
+    $perguntaEncontrada = explode("|", $linhaNova);
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Pergunta</title>
+</head>
+
+<body>
+
+<h1>Editar Pergunta</h1>
+
+<?php
+
+if ($perguntaEncontrada == null) {
+
+    echo "<p>Pergunta não encontrada.</p>";
+
+} else {
+
+?>
+
+<form method="POST">
+
+    Desafio:
+    <br>
+
+    <input type="text"
+           name="desafio"
+           value="<?php echo $perguntaEncontrada[1]; ?>"
+           required>
+
+    <br><br>
+
+    Pergunta:
+    <br>
+
+    <textarea name="pergunta" required><?php echo $perguntaEncontrada[2]; ?></textarea>
+
+    <br><br>
+
+    <?php
+
+    if ($perguntaEncontrada[3] == "multipla") {
+
+    ?>
+
+        <h3>Opções</h3>
+
+        Opção 1:
+        <br>
+        <input type="text"
+               name="opcao1"
+               value="<?php echo $perguntaEncontrada[4]; ?>">
+
+        <br>
+
+        Opção 2:
+        <br>
+        <input type="text"
+               name="opcao2"
+               value="<?php echo $perguntaEncontrada[5]; ?>">
+
+        <br>
+
+        Opção 3:
+        <br>
+        <input type="text"
+               name="opcao3"
+               value="<?php echo $perguntaEncontrada[6]; ?>">
+
+        <br>
+
+        Opção 4:
+        <br>
+        <input type="text"
+               name="opcao4"
+               value="<?php echo $perguntaEncontrada[7]; ?>">
+
+        <br><br>
+
+        Resposta correta:
+        <br>
+
+        <input type="text"
+               name="correta"
+               value="<?php echo $perguntaEncontrada[8]; ?>">
+
+    <?php
+
+    } else {
+
+    ?>
+
+        Resposta:
+        <br>
+
+        <textarea name="resposta"><?php echo $perguntaEncontrada[4]; ?></textarea>
+
+    <?php
+
+    }
+
+    ?>
+
+    <br><br>
+
+    <input type="submit" value="Salvar alterações">
+
+</form>
+
+<?php
+
+}
+
+?>
+
+<br>
+
+<a href="listar_perguntas.php">Voltar</a>
+
+</body>
+</html>
