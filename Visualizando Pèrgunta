@@ -1,0 +1,72 @@
+<?php
+
+$id = $_GET["id"];
+
+$linhas = file("perguntas.txt", FILE_IGNORE_NEW_LINES);
+
+$perguntaEncontrada = null;
+
+foreach ($linhas as $linha) {
+
+    $dados = explode("|", $linha);
+
+    if ($dados[0] == $id) {
+
+        $perguntaEncontrada = $dados;
+
+        break;
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar Pergunta</title>
+</head>
+
+<body>
+
+<h1>Visualizar Pergunta</h1>
+
+<?php
+
+if ($perguntaEncontrada == null) {
+
+    echo "<p>Pergunta não encontrada.</p>";
+
+} else {
+
+    echo "<strong>ID:</strong> " . $perguntaEncontrada[0] . "<br><br>";
+
+    echo "<strong>Desafio:</strong> " . $perguntaEncontrada[1] . "<br><br>";
+
+    echo "<strong>Pergunta:</strong> " . $perguntaEncontrada[2] . "<br><br>";
+
+    echo "<strong>Tipo:</strong> " . $perguntaEncontrada[3] . "<br><br>";
+
+    if ($perguntaEncontrada[3] == "multipla") {
+
+        echo "<strong>Opção 1:</strong> " . $perguntaEncontrada[4] . "<br>";
+        echo "<strong>Opção 2:</strong> " . $perguntaEncontrada[5] . "<br>";
+        echo "<strong>Opção 3:</strong> " . $perguntaEncontrada[6] . "<br>";
+        echo "<strong>Opção 4:</strong> " . $perguntaEncontrada[7] . "<br><br>";
+
+        echo "<strong>Resposta correta:</strong> " . $perguntaEncontrada[8] . "<br>";
+
+    } else {
+
+        echo "<strong>Resposta:</strong> " . $perguntaEncontrada[4] . "<br>";
+    }
+}
+
+?>
+
+<br>
+
+<a href="listar_perguntas.php">Voltar para perguntas</a>
+
+</body>
+</html>
