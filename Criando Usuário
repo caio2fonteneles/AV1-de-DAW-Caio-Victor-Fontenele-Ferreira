@@ -1,0 +1,62 @@
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+
+    $id = time();
+
+    $linha = $id . "|" .
+             $nome . "|" .
+             $email .
+             PHP_EOL;
+
+    file_put_contents(
+        "usuarios.txt",
+        $linha,
+        FILE_APPEND
+    );
+
+    echo "<p>Usuário cadastrado com sucesso!</p>";
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Usuário</title>
+</head>
+
+<body>
+
+<h1>Cadastrar Usuário</h1>
+
+<form method="POST">
+
+    Nome:
+    <br>
+
+    <input type="text" name="nome" required>
+
+    <br><br>
+
+    E-mail:
+    <br>
+
+    <input type="email" name="email" required>
+
+    <br><br>
+
+    <input type="submit" value="Cadastrar">
+
+</form>
+
+<br>
+
+<a href="usuarios.php">Voltar</a>
+
+</body>
+</html>
