@@ -1,0 +1,44 @@
+<?php
+
+$id = $_GET["id"];
+
+$arquivo = "perguntas.txt";
+
+$linhas = file($arquivo, FILE_IGNORE_NEW_LINES);
+
+$novasLinhas = [];
+
+foreach ($linhas as $linha) {
+
+    $dados = explode("|", $linha);
+
+    if ($dados[0] != $id) {
+
+        $novasLinhas[] = $linha;
+    }
+}
+
+file_put_contents(
+    $arquivo,
+    implode(PHP_EOL, $novasLinhas) . PHP_EOL
+);
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Pergunta</title>
+</head>
+
+<body>
+
+<h1>Pergunta excluída!</h1>
+
+<p>A pergunta e suas respostas foram excluídas.</p>
+
+<a href="listar_perguntas.php">Voltar para perguntas</a>
+
+</body>
+</html>
