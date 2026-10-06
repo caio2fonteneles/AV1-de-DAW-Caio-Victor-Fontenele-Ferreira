@@ -1,0 +1,140 @@
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $desafio = $_POST["desafio"];
+    $pergunta = $_POST["pergunta"];
+    $tipo = $_POST["tipo"];
+
+    // Gera um ID simples
+    $id = time();
+
+    if ($tipo == "multipla") {
+
+        $opcao1 = $_POST["opcao1"];
+        $opcao2 = $_POST["opcao2"];
+        $opcao3 = $_POST["opcao3"];
+        $opcao4 = $_POST["opcao4"];
+        $correta = $_POST["correta"];
+
+        /*
+        ID|DESAFIO|PERGUNTA|TIPO|OPCAO1|OPCAO2|OPCAO3|OPCAO4|CORRETA
+        */
+
+        $linha = $id . "|" .
+                 $desafio . "|" .
+                 $pergunta . "|" .
+                 $tipo . "|" .
+                 $opcao1 . "|" .
+                 $opcao2 . "|" .
+                 $opcao3 . "|" .
+                 $opcao4 . "|" .
+                 $correta . PHP_EOL;
+
+    } else {
+
+        $resposta = $_POST["resposta"];
+
+        /*
+        ID|DESAFIO|PERGUNTA|TIPO|RESPOSTA
+        */
+
+        $linha = $id . "|" .
+                 $desafio . "|" .
+                 $pergunta . "|" .
+                 $tipo . "|" .
+                 $resposta . PHP_EOL;
+    }
+
+    file_put_contents("perguntas.txt", $linha, FILE_APPEND);
+
+    echo "<p>Pergunta cadastrada com sucesso!</p>";
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Pergunta</title>
+</head>
+
+<body>
+
+<h1>Criar Pergunta</h1>
+
+<form method="POST">
+
+    Desafio:
+    <br>
+    <input type="text" name="desafio" required>
+
+    <br><br>
+
+    Pergunta:
+    <br>
+    <textarea name="pergunta" required></textarea>
+
+    <br><br>
+
+    Tipo:
+    <br>
+
+    <select name="tipo" required>
+        <option value="multipla">Múltipla escolha</option>
+        <option value="texto">Texto</option>
+    </select>
+
+    <br><br>
+
+    <h3>Opções para múltipla escolha</h3>
+
+    Opção 1:
+    <br>
+    <input type="text" name="opcao1">
+
+    <br>
+
+    Opção 2:
+    <br>
+    <input type="text" name="opcao2">
+
+    <br>
+
+    Opção 3:
+    <br>
+    <input type="text" name="opcao3">
+
+    <br>
+
+    Opção 4:
+    <br>
+    <input type="text" name="opcao4">
+
+    <br><br>
+
+    Resposta correta:
+    <br>
+    <input type="text" name="correta">
+
+    <br><br>
+
+    <h3>Resposta para pergunta de texto</h3>
+
+    Resposta:
+    <br>
+    <textarea name="resposta"></textarea>
+
+    <br><br>
+
+    <input type="submit" value="Cadastrar">
+
+</form>
+
+<br>
+
+<a href="index.php">Voltar</a>
+
+</body>
+</html>
